@@ -1,117 +1,166 @@
 Operational Manual for Amazon Connect and NexTalk Contact Center Solution
-1. High-Level Overview
+
+High-Level Overview
+
 The system integrates Amazon Connect, NexTalk infrastructure, PEGA CRM, and supporting AWS services to provide a multi-channel contact center solution. It supports various service delivery methods like voice, chat, email, and video. Real-time monitoring and analytics tools like Splunk, Dynatrace, and Amazon QuickSight are utilized for operational insights.
 
-2. Key Components and Their Roles
+Key Components and Their Roles
+
 A. Service Delivery Options
+
 Channels: Email, web, chat, video, voice/SMS.
+
 Purpose: Interface for customer interactions routed to the contact center through various channels.
+
 B. AWS Connect Ecosystem
-Amazon Connect:
-Manages voice and chat traffic through its contact flows.
-Integrates with Lambda functions, Amazon Lex, and Amazon DynamoDB for advanced functionality.
-Amazon Lex:
-Used for conversational AI to enable intelligent chat/voice interactions.
-AWS Lambda:
-Executes backend logic to process contact flows, integrate data, and handle real-time events.
-Amazon S3 and Kinesis:
-Call and IVR transaction data are streamed to Kinesis and stored in S3.
-Enables event-driven processing and analytics through Amazon Athena and Amazon QuickSight.
-Amazon EventBridge:
-Manages events for orchestration across the contact center solution.
-Amazon DynamoDB:
-Stores call and IVR transaction data for rapid retrieval.
+
+Amazon Connect: Manages voice and chat traffic through its contact flows and integrates with AWS services for advanced functionality.
+
+Amazon Lex: Used for conversational AI to enable intelligent chat/voice interactions.
+
+AWS Lambda: Executes backend logic to process contact flows, integrate data, and handle real-time events.
+
+Amazon S3 and Kinesis: Stream call and IVR transaction data to Kinesis and store it in S3. Enable event-driven processing and analytics through Amazon Athena and Amazon QuickSight.
+
+Amazon EventBridge: Manages events for orchestration across the contact center solution.
+
+Amazon DynamoDB: Stores call and IVR transaction data for rapid retrieval.
+
 C. NexTalk Infrastructure
-NexTalk Server:
-Handles TTY phone number calls and bridges chat sessions.
-NexTalk API Server:
-Facilitates communication between NexTalk and other systems like Amazon Connect.
-Chat Bridge (TTY-Chat Session):
-Acts as a middleware to ensure connectivity between NexTalk and Amazon Connect.
-Amazon RDS:
-Manages NexTalk’s configuration files in a SQL Server database.
+
+NexTalk Server: Handles TTY phone number calls and bridges chat sessions.
+
+NexTalk API Server: Facilitates communication between NexTalk and other systems like Amazon Connect.
+
+Chat Bridge (TTY-Chat Session): Acts as middleware to ensure connectivity between NexTalk and Amazon Connect.
+
+Amazon RDS: Manages NexTalk’s configuration files in a SQL Server database.
+
 D. PEGA CRM
-Workflow Data:
-Manages case management workflows and screen pop-ups for agents.
-PEGA CM Stream:
-Handles real-time data flow for better customer interaction management.
+
+Workflow Data: Manages case management workflows and screen pop-ups for agents.
+
+PEGA CM Stream: Handles real-time data flow for better customer interaction management.
+
 E. Monitoring Tools
-Splunk and Dynatrace:
-Real-time system monitoring for logs and performance.
-Amazon QuickSight:
-Visualizes analytics for call/IVR data stored in S3 or DynamoDB.
+
+Splunk and Dynatrace: Provide real-time system monitoring for logs and performance.
+
+Amazon QuickSight: Visualizes analytics for call/IVR data stored in S3 or DynamoDB.
+
 F. SSA IVR Services
+
 Provides IVR functionality for the system, routing calls and coordinating with NexTalk.
+
 G. AWS Direct Connect
+
 Enables a dedicated network connection to AWS services, ensuring low latency and secure communication.
-3. Workflow Explanation
-Customer Interaction:
+
+Workflow Explanation
+
+1. Customer Interaction
 
 Customers initiate interactions via email, web, chat, video, or voice/SMS.
+
 Voice calls or TTY phone numbers are routed through NexTalk infrastructure.
-Routing and Processing:
+
+2. Routing and Processing
 
 Calls are routed through Amazon Connect and processed by associated Lambda functions.
+
 Amazon Lex handles AI-driven conversational flows for chat or voice.
+
 TTY and chat sessions are routed via the Chat Bridge to Amazon Connect.
-Data Storage and Processing:
+
+3. Data Storage and Processing
 
 Call and IVR transaction data are streamed to Amazon Kinesis.
+
 Data is stored in DynamoDB for quick retrieval and analyzed using Athena and QuickSight.
-CRM Integration:
+
+4. CRM Integration
 
 PEGA CRM retrieves case-specific workflows and provides screen pop-ups for agents, streamlining customer support.
-Monitoring:
+
+5. Monitoring
 
 Real-time monitoring of infrastructure and application performance is handled by Splunk, Dynatrace, and Amazon CloudWatch.
-4. Operational Guidelines
+
+Operational Guidelines
+
 A. System Monitoring
+
 Tools Used: Splunk, Dynatrace, Amazon CloudWatch.
+
 Metrics to Monitor:
+
 Health of Lambda functions, NexTalk servers, and Chat Bridge.
+
 Call/IVR data throughput in Kinesis and S3.
+
 CRM workflow processing times and accuracy.
+
 B. Troubleshooting
+
 Connectivity Issues (NexTalk and Amazon Connect):
 
 Check NexTalk server logs located in C:\ProgramData\NexTalk\Logs.
+
 Verify DNS and network connectivity between servers.
+
 Ensure that the Chat Bridge service is running.
+
 Service Failures:
 
 Restart affected Windows services on NexTalk servers (e.g., App API, Chat Bridge).
+
 Check AWS Lambda logs for errors using Amazon CloudWatch.
+
 High Latency or Performance Issues:
 
 Monitor Kinesis stream latency using CloudWatch.
+
 Check DynamoDB throughput and scaling metrics.
+
 Ensure sufficient ports are available on NexTalk servers for call handling.
+
 C. Maintenance
+
 Weekly Tasks:
+
 Review logs for errors or warnings in NexTalk and Amazon Connect.
+
 Verify system health metrics in Splunk and Dynatrace.
+
 Monthly Tasks:
+
 Audit call/IVR data for anomalies.
+
 Review port utilization and scale resources if needed.
+
 Quarterly Tasks:
+
 Apply updates to NexTalk servers and AWS resources.
+
 Perform disaster recovery drills using Direct Connect and backup data in S3.
-5. Disaster Recovery Plan
-System Backup:
+
+Disaster Recovery Plan
+
+A. System Backup
 
 Regularly back up NexTalk configurations stored in Amazon RDS.
+
 Ensure call/IVR data in DynamoDB is backed up to S3.
-Failover Mechanism:
+
+B. Failover Mechanism
 
 NexTalk infrastructure uses two servers for redundancy. Ensure that one server can handle traffic if the other fails.
+
 AWS services are inherently redundant and scalable.
-Testing:
+
+C. Testing
 
 Schedule quarterly failover tests for NexTalk servers and AWS Direct Connect.
-6. Recommendations
-Automation: Use AWS Systems Manager for patch management on NexTalk servers.
-Documentation Updates: Maintain detailed records of changes in the workflow or configurations.
-Training: Provide regular training for staff on using monitoring tools and troubleshooting.
 
 # TerraformEcomerce
 
